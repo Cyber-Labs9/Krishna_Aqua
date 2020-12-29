@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">KrishnaAqua</string>
+    <string name="Open">Open</string>
+    <string name="Close">Close</string>
+    <string-array name="types_jug">
+        <item>20 Litre ₹20</item>
+        <item>30 Litre ₹30</item>
+        <item>40 Litre ₹40</item>
+        <item>50 Litre ₹50</item>
+    </string-array>
+</resources>
