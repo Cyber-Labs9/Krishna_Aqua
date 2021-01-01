@@ -1,8 +1,7 @@
-package com.ka.krishnaaqua;
+package com.ka.krishnaaqua.auth;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -10,6 +9,10 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.ka.krishnaaqua.SessionManagement;
+import com.ka.krishnaaqua.User;
+import com.ka.krishnaaqua.dashboard.Home;
+import com.ka.krishnaaqua.R;
 import com.ka.krishnaaqua.databinding.ActivityLoginBinding;
 import com.ka.krishnaaqua.network.Api;
 import com.ka.krishnaaqua.network.AppConfig;
@@ -61,6 +64,23 @@ public class Login extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+//        Check if user logged in
+//        if yes then move to dashboard
+        SessionManagement sessionManagement = new SessionManagement(Login.this);
+        int UsedId = sessionManagement.getSession();
+
+        if (UsedId == -1){
+            MoveToActivity();
+        }else{
+//            Do Nothing
+        }
+
+
+    }
+
     private void doLogin(String email, String password) {
         Retrofit retrofit = AppConfig.getRetrofit();
         Api service = retrofit.create(Api.class);
@@ -76,9 +96,12 @@ public class Login extends AppCompatActivity {
 
                     if(!serverResponse.getError()){
                         Config.showToast(context,serverResponse.getMessage());
-                        Intent obj = new Intent(Login.this, Home.class);
-                        startActivity(obj);
-                        finish();
+//                        SessionGeneration
+                        User user = new User(1,email);
+                        SessionManagement sessionManagement = new SessionManagement(Login.this);
+                        sessionManagement.saveSession(user);
+                        MoveToActivity();
+
                     }
                     else {
                         Config.showToast(context,serverResponse.getMessage());
@@ -93,5 +116,11 @@ public class Login extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void MoveToActivity() {
+        Intent obj = new Intent(Login.this, Home.class);
+        obj.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(obj);
     }
 }

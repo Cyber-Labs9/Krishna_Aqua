@@ -1,4 +1,4 @@
-package com.ka.krishnaaqua;
+package com.ka.krishnaaqua.auth;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,6 +8,7 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.ka.krishnaaqua.R;
 import com.ka.krishnaaqua.databinding.ActivityRegisterBinding;
 import com.ka.krishnaaqua.network.Api;
 import com.ka.krishnaaqua.network.AppConfig;
@@ -62,7 +63,7 @@ public class Register extends AppCompatActivity {
         Retrofit retrofit = AppConfig.getRetrofit();
         Api service = retrofit.create(Api.class);
 
-        Call<ServerResponse> call = service.register(name, email, password, phone, address);
+        Call<ServerResponse> call = service.register(name, email, password, phone);
         call.enqueue(new Callback<ServerResponse>() {
             @Override
             public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {

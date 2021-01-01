@@ -14,7 +14,7 @@ public interface Api {
     @POST(my_url + "login")
     Call<ServerResponse> login(
             @Field("email") String mobile_no,
-            @Field("password") String password
+            @Field("pwd") String password
     );
 
     @FormUrlEncoded
@@ -22,9 +22,9 @@ public interface Api {
     Call<ServerResponse> register(
             @Field("name") String mName,
             @Field("email") String mEmail,
-            @Field("password") String mPwd,
-            @Field("phone") String mphone,
-            @Field("address") String maddress
+            @Field("pwd") String mPwd,
+            @Field("phone") String mphone
+//            @Field("address") String maddress
 
     );
 
