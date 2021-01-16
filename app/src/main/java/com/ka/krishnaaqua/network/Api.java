@@ -20,11 +20,11 @@ public interface Api {
     @FormUrlEncoded
     @POST(my_url + "register")
     Call<ServerResponse> register(
-            @Field("name") String mName,
-            @Field("email") String mEmail,
-            @Field("pwd") String mPwd,
-            @Field("phone") String mphone
-//            @Field("address") String maddress
+            @Field("name") String mName ,
+            @Field("email") String mEmail ,
+            @Field("pwd") String mPwd ,
+            @Field("mobile") String mphone ,
+            @Field("address") String maddress
 
     );
 

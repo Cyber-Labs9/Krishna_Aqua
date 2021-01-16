@@ -1,11 +1,11 @@
 package com.ka.krishnaaqua;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.WindowManager;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.ka.krishnaaqua.auth.Login;
 
@@ -16,15 +16,15 @@ public class MainActivity extends AppCompatActivity {
     @SuppressWarnings("deprecation")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.activity_main);
+        super.onCreate ( savedInstanceState );
+        getWindow ( ).setFlags ( WindowManager.LayoutParams.FLAG_FULLSCREEN , WindowManager.LayoutParams.FLAG_FULLSCREEN );
+        setContentView ( R.layout.activity_main );
 
-       new Handler().postDelayed(() -> {
-           Intent log = new Intent(MainActivity.this, Login.class);
-           startActivity(log);
-           finish();
-       },Splash_Screen_Timeout);
+        new Handler ( ).postDelayed ( () -> {
+            Intent log = new Intent ( MainActivity.this , Login.class );
+            startActivity ( log );
+            finish ( );
+        } , Splash_Screen_Timeout );
 
 
     }

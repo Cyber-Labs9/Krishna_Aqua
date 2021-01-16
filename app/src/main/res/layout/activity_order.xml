@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:background="@color/accent"
             app:title="Order"
-            app:titleMarginStart="10dp"
+            app:titleMarginStart="10sp"
             app:titleTextColor="@color/white" />
 
     </RelativeLayout>

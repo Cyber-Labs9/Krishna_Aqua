@@ -23,7 +23,7 @@ import retrofit2.Retrofit;
 public class Register extends AppCompatActivity {
 
     private ActivityRegisterBinding binding;
-    private Context context = this;
+    private final Context context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +63,7 @@ public class Register extends AppCompatActivity {
         Retrofit retrofit = AppConfig.getRetrofit();
         Api service = retrofit.create(Api.class);
 
-        Call<ServerResponse> call = service.register(name, email, password, phone);
+        Call<ServerResponse> call = service.register ( name , email , password , phone , address );
         call.enqueue(new Callback<ServerResponse>() {
             @Override
             public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {

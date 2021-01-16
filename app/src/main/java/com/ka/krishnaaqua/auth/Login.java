@@ -9,10 +9,10 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.ka.krishnaaqua.SessionManagement;
-import com.ka.krishnaaqua.User;
-import com.ka.krishnaaqua.dashboard.Home;
 import com.ka.krishnaaqua.R;
+import com.ka.krishnaaqua.SessionManagement.SessionManagement;
+import com.ka.krishnaaqua.SessionManagement.User;
+import com.ka.krishnaaqua.dashboard.Home;
 import com.ka.krishnaaqua.databinding.ActivityLoginBinding;
 import com.ka.krishnaaqua.network.Api;
 import com.ka.krishnaaqua.network.AppConfig;
@@ -27,7 +27,7 @@ import retrofit2.Retrofit;
 public class Login extends AppCompatActivity {
 
     private ActivityLoginBinding binding;
-    private Context context = this;
+    private final Context context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,33 +56,35 @@ public class Login extends AppCompatActivity {
 
         });
 
-        binding.registerbtn.setOnClickListener(v -> {
-            Intent obj = new Intent(Login.this, Register.class);
-            Login.this.startActivity(obj);
-            Login.this.finish();
-        });
+        binding.registerbtn.setOnClickListener ( v -> {
+            Intent obj = new Intent ( Login.this , Register.class );
+            Login.this.startActivity ( obj );
+
+        } );
 
     }
 
     @Override
     protected void onStart() {
-        super.onStart();
-//        Check if user logged in
-//        if yes then move to dashboard
-        SessionManagement sessionManagement = new SessionManagement(Login.this);
-        int UsedId = sessionManagement.getSession();
-
-        if (UsedId == -1){
-            MoveToActivity();
-        }else{
-//            Do Nothing
-        }
-
-
+        super.onStart ( );
+        CheckSession ( );
     }
 
-    private void doLogin(String email, String password) {
-        Retrofit retrofit = AppConfig.getRetrofit();
+    private void CheckSession() {
+        //   Check if user logged in
+        //   If yes then move to dashboard
+        SessionManagement sessionManagement = new SessionManagement ( Login.this );
+        int UsedId = sessionManagement.getSession ( );
+
+        if (UsedId != -1) {
+            MoveToActivity ( );
+        } else {
+            //   Do Nothing
+        }
+    }
+
+    private void doLogin(String email , String password) {
+        Retrofit retrofit = AppConfig.getRetrofit ( );
         Api service = retrofit.create(Api.class);
 
         Call<ServerResponse> call = service.login(email, password);
@@ -119,8 +121,8 @@ public class Login extends AppCompatActivity {
     }
 
     private void MoveToActivity() {
-        Intent obj = new Intent(Login.this, Home.class);
-        obj.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(obj);
+        Intent obj = new Intent ( Login.this , Home.class );
+        obj.setFlags ( Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK );
+        startActivity ( obj );
     }
 }

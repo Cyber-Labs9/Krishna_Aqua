@@ -14,18 +14,19 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.KrishnaAqua"
         android:usesCleartextTraffic="true">
-        <activity android:name=".dashboard.History"></activity>
-        <activity android:name=".dashboard.Order" />
-        <activity android:name=".dashboard.Home" />
-        <activity android:name=".auth.Register" />
-        <activity android:name=".auth.Login" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".dashboard.Home">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".dashboard.ReviewOrder"></activity>
+        <activity android:name=".dashboard.History" />
+        <activity android:name=".dashboard.Order" />
+        <activity android:name=".MainActivity" />
+        <activity android:name=".auth.Register" />
+        <activity android:name=".auth.Login" />
     </application>
 
 </manifest>

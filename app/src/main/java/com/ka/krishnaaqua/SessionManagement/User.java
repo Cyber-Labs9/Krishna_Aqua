@@ -1,4 +1,4 @@
-package com.ka.krishnaaqua;
+package com.ka.krishnaaqua.SessionManagement;
 
 public class User {
 

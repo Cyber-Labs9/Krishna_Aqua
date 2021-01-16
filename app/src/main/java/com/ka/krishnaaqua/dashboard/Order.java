@@ -12,6 +12,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
 import com.ka.krishnaaqua.R;
+import com.ka.krishnaaqua.SessionManagement.SessionManagement;
+import com.ka.krishnaaqua.auth.Login;
 import com.ka.krishnaaqua.databinding.ActivityOrderBinding;
 
 public class Order extends AppCompatActivity {
@@ -29,15 +31,15 @@ public class Order extends AppCompatActivity {
         setContentView(R.layout.activity_order);
 
         mtoolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(mtoolbar);
-        nav = findViewById(R.id.navmenu);
-        mDrawerLayout = findViewById(R.id.drawer);
+        setSupportActionBar ( mtoolbar );
+        nav           = findViewById ( R.id.navmenu );
+        mDrawerLayout = findViewById ( R.id.drawer );
 
         mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, mtoolbar, R.string.Open, R.string.Close);
         mDrawerLayout.addDrawerListener(mToggle);
         mToggle.syncState();
 
-        nav.setNavigationItemSelectedListener(item -> {
+        nav.setNavigationItemSelectedListener( item -> {
 
             switch (item.getItemId()) {
 
@@ -54,22 +56,34 @@ public class Order extends AppCompatActivity {
                     break;
 
                 case R.id.history:
-                    Intent history = new Intent(Order.this, History.class);
-                    startActivity(history);
-                    finish();
-                    Toast.makeText(Order.this, "History", Toast.LENGTH_LONG).show();
-                    mDrawerLayout.closeDrawer(GravityCompat.START);
+                    Intent history = new Intent ( Order.this , History.class );
+                    startActivity ( history );
+                    finish ( );
+                    Toast.makeText ( Order.this , "History" , Toast.LENGTH_LONG ).show ( );
+                    mDrawerLayout.closeDrawer ( GravityCompat.START );
                     break;
 
                 case R.id.logout:
-                    Toast.makeText(Order.this, "Logout", Toast.LENGTH_SHORT).show();
-                    mDrawerLayout.closeDrawer(GravityCompat.START);
+                    Toast.makeText ( Order.this , "Logout" , Toast.LENGTH_SHORT ).show ( );
+                    LogOut ( );
+                    mDrawerLayout.closeDrawer ( GravityCompat.START );
 
             }
 
             return true;
-        });
+        } );
 
 
+    }
+
+    private void LogOut() {
+        SessionManagement sessionManagement = new SessionManagement ( Order.this );
+        sessionManagement.removeSession ( );
+        MoveToLogin ( );
+    }
+
+    private void MoveToLogin() {
+        Intent log = new Intent ( Order.this , Login.class );
+        startActivity ( log );
     }
 }

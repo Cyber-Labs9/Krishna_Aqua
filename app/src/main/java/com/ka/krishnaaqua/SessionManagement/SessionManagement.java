@@ -1,4 +1,4 @@
-package com.ka.krishnaaqua;
+package com.ka.krishnaaqua.SessionManagement;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -16,15 +16,18 @@ public class SessionManagement {
     }
     public void saveSession(User user){
 //            Save the session of the user who logged in
-        int id = user.getId();
+        int id = user.getId ( );
 
-        editor.putInt(SESSION_KEY,id).commit();
+        editor.putInt ( SESSION_KEY , id ).commit ( );
     }
 
-    public int getSession(){
+    public int getSession() {
 //        return user whose session is saved
+        return sharedPreferences.getInt ( SESSION_KEY , -1 );
+    }
 
-        return sharedPreferences.getInt(SESSION_KEY,-1);
+    public void removeSession() {
+        editor.putInt ( SESSION_KEY , -1 ).commit ( );
     }
 
 }
