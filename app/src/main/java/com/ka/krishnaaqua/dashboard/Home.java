@@ -31,7 +31,7 @@ import java.util.Date;
 public class Home extends AppCompatActivity implements
         AdapterView.OnItemSelectedListener {
 
-
+    /*--------------------------------Variable Declaration-------------------------------------------------------------------------------------*/
     private static final String TAG = "Home";
     private final Context context = this;
     public String startDate = "";
@@ -61,8 +61,6 @@ public class Home extends AppCompatActivity implements
 
         nav           = findViewById ( R.id.navmenu );
         mDrawerLayout = findViewById ( R.id.drawer );
-
-//        Spinner spin = findViewById(R.id.spinner);
         mBinding.spinner.setOnItemSelectedListener ( this );
         ArrayAdapter mArr = new ArrayAdapter ( this , android.R.layout.simple_spinner_dropdown_item , Jug );
         mArr.setDropDownViewResource ( android.R.layout.simple_spinner_dropdown_item );
@@ -70,7 +68,7 @@ public class Home extends AppCompatActivity implements
 
         Button StartFrom = mBinding.StartFrom;
         Button EndAt = mBinding.EndAt;
-
+        /*-----------------------------------------------Navigation Drawer-------------------------------------------------------------------------------------------*/
         mToggle = new ActionBarDrawerToggle ( this , mDrawerLayout , mtoolbar , R.string.Open , R.string.Close );
         mDrawerLayout.addDrawerListener ( mToggle );
         mToggle.syncState ( );
@@ -104,8 +102,9 @@ public class Home extends AppCompatActivity implements
             }
 
             return true;
-        });
+        } );
 
+        /*------------------------------------------------------Date Picker----------------------------------------------------------------------------------*/
         StartFrom.setOnClickListener ( v -> {
             MaterialDatePicker.Builder materialDateBuilder = MaterialDatePicker.Builder.datePicker ( );
             materialDateBuilder.setTitleText ( "Start Date" );
@@ -153,6 +152,7 @@ public class Home extends AppCompatActivity implements
 
     }
 
+    /*------------------------------------------------------Method Call-------------------------------------------------------------------------------------*/
     private void LogOut() {
 //        This Method will remove session
         SessionManagement sessionManagement = new SessionManagement ( Home.this );

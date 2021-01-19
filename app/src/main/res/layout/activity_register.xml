@@ -34,8 +34,8 @@
             android:layout_marginTop="15dp"
             android:hint="Name"
             android:inputType="text"
-            android:padding="15sp"
-            android:textSize="24sp" />
+            android:padding="7.5sp"
+            android:textSize="20sp" />
 
         <EditText
             android:id="@+id/email"
@@ -44,8 +44,8 @@
             android:layout_marginTop="15sp"
             android:hint="Email"
             android:inputType="textEmailAddress"
-            android:padding="15dp"
-            android:textSize="24sp" />
+            android:padding="7.5sp"
+            android:textSize="20sp" />
 
         <EditText
             android:id="@+id/password"
@@ -54,8 +54,8 @@
             android:layout_marginTop="15sp"
             android:hint="Password"
             android:inputType="textPassword"
-            android:padding="15sp"
-            android:textSize="24sp" />
+            android:padding="7.5sp"
+            android:textSize="20sp" />
 
         <EditText
             android:id="@+id/phone"
@@ -64,8 +64,8 @@
             android:layout_marginTop="15sp"
             android:hint="Phone Number"
             android:inputType="phone"
-            android:padding="15sp"
-            android:textSize="24sp" />
+            android:padding="7.5sp"
+            android:textSize="20sp" />
 
         <EditText
             android:id="@+id/address"
@@ -74,8 +74,8 @@
             android:layout_marginTop="15sp"
             android:hint="Address"
             android:inputType="textImeMultiLine"
-            android:padding="15sp"
-            android:textSize="24sp" />
+            android:padding="7.5sp"
+            android:textSize="20sp" />
 
         <Button
             android:id="@+id/registerbtn"
@@ -85,7 +85,7 @@
             android:background="@drawable/roundbtn"
             android:padding="15sp"
             android:text="Register"
-            android:textSize="25sp" />
+            android:textSize="20sp" />
 
 
     </LinearLayout>

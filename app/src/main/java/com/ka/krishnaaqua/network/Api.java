@@ -13,9 +13,17 @@ public interface Api {
     @FormUrlEncoded
     @POST(my_url + "login")
     Call<ServerResponse> login(
-            @Field("email") String mobile_no,
+            @Field("email") String email ,
             @Field("pwd") String password
     );
+
+    @FormUrlEncoded
+    @POST(my_url + "login_data")
+    Call<ServerResponse> login_data(
+            @Field("email") String email ,
+            @Field("pwd") String password
+    );
+
 
     @FormUrlEncoded
     @POST(my_url + "register")
@@ -25,7 +33,6 @@ public interface Api {
             @Field("pwd") String mPwd ,
             @Field("mobile") String mphone ,
             @Field("address") String maddress
-
     );
 
 }

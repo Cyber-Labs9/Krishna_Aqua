@@ -97,12 +97,29 @@ public class Login extends AppCompatActivity {
                     ServerResponse serverResponse = response.body();
 
                     if(!serverResponse.getError()){
-                        Config.showToast(context,serverResponse.getMessage());
+                        Config.showToast ( context , serverResponse.getMessage ( ) );
+//                        Login Data
+                        Call<ServerResponse> datacall = service.login_data ( email , password );
+                        datacall.enqueue ( new Callback<ServerResponse> ( ) {
+                            @Override
+                            public void onResponse(Call<ServerResponse> call , Response<ServerResponse> response) {
+
+                                if (response.body ( ) != null) {
+                                    ServerResponse serverResponse = response.body ( );
+                                    Log.e ( "Data" , String.valueOf ( serverResponse ) );
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<ServerResponse> call , Throwable t) {
+
+                            }
+                        } );
 //                        SessionGeneration
-                        User user = new User(1,email);
-                        SessionManagement sessionManagement = new SessionManagement(Login.this);
-                        sessionManagement.saveSession(user);
-                        MoveToActivity();
+                        User user = new User ( 1 , email );
+                        SessionManagement sessionManagement = new SessionManagement ( Login.this );
+                        sessionManagement.saveSession ( user );
+                        MoveToActivity ( );
 
                     }
                     else {

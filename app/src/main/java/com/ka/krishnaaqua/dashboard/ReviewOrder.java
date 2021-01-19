@@ -17,6 +17,12 @@ import com.razorpay.PaymentResultListener;
 
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
+
 public class ReviewOrder extends AppCompatActivity implements PaymentResultListener {
     private static final String TAG = ReviewOrder.class.getSimpleName ( );
 
@@ -25,6 +31,7 @@ public class ReviewOrder extends AppCompatActivity implements PaymentResultListe
     private ActivityReviewOrderBinding binding;
     private OrderData orderData;
     private int Total;
+    private int Days;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,15 +46,25 @@ public class ReviewOrder extends AppCompatActivity implements PaymentResultListe
 
         String Qty = String.valueOf ( orderData.getQuantity ( ) );
         int Price = Integer.parseInt ( String.valueOf ( orderData.getPrice ( ) ) );
+
+
         String StartDate = orderData.getStartDate ( );
         String EndDate = orderData.getEndDate ( );
 
+        Calendar start = getCalendarInstance ( StartDate );
+        Calendar end = getCalendarInstance ( EndDate );
 
-        Total = 100 * Price;
+        String diff = getDaysCount ( end , start );
+        Days = Integer.parseInt ( diff );
+
+        Total = 100 * (Price * Days);
+        Log.v ( "" , String.valueOf ( Total ) );
         binding.QuantityValue.setText ( Qty + " " + "Litres" );
         binding.PriceValue.setText ( "₹" + Price + " " + "per Day" );
         binding.StartValue.setText ( StartDate );
         binding.EndDateValue.setText ( EndDate );
+        binding.NoOfDaysValue.setText ( diff );
+        binding.TotalValue.setText ( "₹" + Price * Days );
 
 
         binding.bookbtn.setOnClickListener ( v -> {
@@ -106,6 +123,38 @@ public class ReviewOrder extends AppCompatActivity implements PaymentResultListe
         } catch ( Exception e ) {
             Log.e ( TAG , "Exception in onPaymentError" , e );
         }
+    }
+
+
+
+    /*------------------------------ Convert String in Calendar ---------------------------------*/
+
+    private Calendar getCalendarInstance(String myDate) {
+        Calendar cal = Calendar.getInstance ( );
+        SimpleDateFormat sdf = new SimpleDateFormat ( "dd/MM/yyyy" , Locale.getDefault ( ) );
+
+        try {
+            cal.setTime ( sdf.parse ( myDate ) );// all done
+        } catch ( ParseException e ) {
+            e.printStackTrace ( );
+        }
+
+        return cal;
+    }
+
+
+
+
+    /*------------------------------ Count Days Between Dates ---------------------------------*/
+
+    private String getDaysCount(Calendar start , Calendar end) {
+
+        long msDiff = start.getTimeInMillis ( ) - end.getTimeInMillis ( );
+        long daysDiff = TimeUnit.MILLISECONDS.toDays ( msDiff );
+
+
+        Log.d ( TAG , "getDaysCount: " + daysDiff );
+        return String.valueOf ( daysDiff );
     }
 
 
