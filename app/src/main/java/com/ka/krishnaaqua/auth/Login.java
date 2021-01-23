@@ -13,6 +13,7 @@ import com.ka.krishnaaqua.R;
 import com.ka.krishnaaqua.SessionManagement.SessionManagement;
 import com.ka.krishnaaqua.SessionManagement.User;
 import com.ka.krishnaaqua.dashboard.Home;
+import com.ka.krishnaaqua.data.OrderData;
 import com.ka.krishnaaqua.data.Users;
 import com.ka.krishnaaqua.databinding.ActivityLoginBinding;
 import com.ka.krishnaaqua.network.Api;
@@ -28,7 +29,7 @@ import retrofit2.Retrofit;
 public class Login extends AppCompatActivity {
 
     private final Context context = this;
-    public String id, name, EMAIL, Password, address, mobile;
+    public String id, name, Email, Password, address, mobile;
     private ActivityLoginBinding binding;
 
     @Override
@@ -78,7 +79,7 @@ public class Login extends AppCompatActivity {
         int UsedId = sessionManagement.getSession ( );
 
         if (UsedId != -1) {
-            MoveToActivity ( );
+            MoveToActivity ( id , name , Email , Password , address , mobile );
         } else {
             //   Do Nothing
         }
@@ -129,7 +130,7 @@ public class Login extends AppCompatActivity {
                     Users loginData = serverResponse.getUsers ( );
                     id       = loginData.getId ( );
                     name     = loginData.getUserName ( );
-                    EMAIL    = loginData.getEmail ( );
+                    Email    = loginData.getEmail ( );
                     Password = loginData.getPassword ( );
                     address  = loginData.getAddress ( );
                     mobile   = loginData.getMobile ( );
@@ -141,17 +142,22 @@ public class Login extends AppCompatActivity {
                 Config.showToast ( context , "Data Not Found" );
             }
         } );
-
-
 //                        SessionGeneration
         User user = new User ( 1 , email , id , name , address , mobile );
         SessionManagement sessionManagement = new SessionManagement ( Login.this );
         sessionManagement.saveSession ( user );
-        MoveToActivity ( );
+        MoveToActivity ( id , name , Email , Password , address , mobile );
     }
 
-    private void MoveToActivity () {
+    private void MoveToActivity ( String id , String name , String email , String password , String address , String mobile ) {
+
+
+        OrderData orderData = new OrderData ( id , name , email , password , address , mobile );
+
         Intent obj = new Intent ( Login.this , Home.class );
+        obj.putExtra ( "userData" , orderData );
+
+
         obj.setFlags ( Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK );
         startActivity ( obj );
     }
