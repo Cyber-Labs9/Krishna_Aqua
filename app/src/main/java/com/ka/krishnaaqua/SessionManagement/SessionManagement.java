@@ -18,7 +18,7 @@ public class SessionManagement {
 //            Save the session of the user who logged in
         int id = user.getId ( );
 
-        editor.putInt ( SESSION_KEY , id ).commit ( );
+        editor.putInt ( SESSION_KEY , id ).apply ( );
     }
 
     public int getSession() {

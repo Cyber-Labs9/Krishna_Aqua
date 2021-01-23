@@ -49,7 +49,7 @@ public class Home extends AppCompatActivity implements
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate ( Bundle savedInstanceState ) {
         super.onCreate ( savedInstanceState );
         setContentView ( R.layout.activity_home );
         mBinding = ActivityHomeBinding.inflate ( getLayoutInflater ( ) );
@@ -82,14 +82,8 @@ public class Home extends AppCompatActivity implements
                     mDrawerLayout.closeDrawer ( GravityCompat.START );
                     break;
 
-                case R.id.order:
-                    Toast.makeText ( Home.this , "Order" , Toast.LENGTH_SHORT ).show ( );
-                    startActivity ( new Intent ( Home.this , Order.class ) );
-                    mDrawerLayout.closeDrawer ( GravityCompat.START );
-                    break;
-
                 case R.id.history:
-                    Toast.makeText ( Home.this , "History" , Toast.LENGTH_LONG ).show ( );
+//                    Toast.makeText ( Home.this , "History" , Toast.LENGTH_LONG ).show ( );
                     startActivity ( new Intent ( Home.this , History.class ) );
                     mDrawerLayout.closeDrawer ( GravityCompat.START );
                     break;
@@ -153,25 +147,25 @@ public class Home extends AppCompatActivity implements
     }
 
     /*------------------------------------------------------Method Call-------------------------------------------------------------------------------------*/
-    private void LogOut() {
+    private void LogOut () {
 //        This Method will remove session
         SessionManagement sessionManagement = new SessionManagement ( Home.this );
         sessionManagement.removeSession ( );
         MoveToLogin ( );
     }
 
-    private void MoveToLogin() {
+    private void MoveToLogin () {
         Intent log = new Intent ( Home.this , Login.class );
         startActivity ( log );
     }
 
     @Override
-    public void onItemSelected(AdapterView<?> parent , View view , int position , long id) {
+    public void onItemSelected ( AdapterView<?> parent , View view , int position , long id ) {
         Toast.makeText ( getApplicationContext ( ) , Jug[position] , Toast.LENGTH_LONG ).show ( );
         jugValue ( Jug[position] );
     }
 
-    private void jugValue(String s) {
+    private void jugValue ( String s ) {
 //        Variables
         String Jug = s;
 //        Data
@@ -204,7 +198,7 @@ public class Home extends AppCompatActivity implements
 
     }
 
-    private void sendData() {
+    private void sendData () {
         Log.v ( TAG , String.valueOf ( price ) );
         Log.v ( TAG , String.valueOf ( qty ) );
         Log.v ( TAG , StartDate );
@@ -220,7 +214,7 @@ public class Home extends AppCompatActivity implements
     }
 
     @Override
-    public void onNothingSelected(AdapterView<?> arg0) {
+    public void onNothingSelected ( AdapterView<?> arg0 ) {
         Config.showToast ( context , "Select Date" );
     }
 

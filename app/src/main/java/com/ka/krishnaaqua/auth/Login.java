@@ -13,6 +13,7 @@ import com.ka.krishnaaqua.R;
 import com.ka.krishnaaqua.SessionManagement.SessionManagement;
 import com.ka.krishnaaqua.SessionManagement.User;
 import com.ka.krishnaaqua.dashboard.Home;
+import com.ka.krishnaaqua.data.Users;
 import com.ka.krishnaaqua.databinding.ActivityLoginBinding;
 import com.ka.krishnaaqua.network.Api;
 import com.ka.krishnaaqua.network.AppConfig;
@@ -26,35 +27,35 @@ import retrofit2.Retrofit;
 
 public class Login extends AppCompatActivity {
 
-    private ActivityLoginBinding binding;
     private final Context context = this;
+    public String id, name, EMAIL, Password, address, mobile;
+    private ActivityLoginBinding binding;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+    protected void onCreate ( Bundle savedInstanceState ) {
+        super.onCreate ( savedInstanceState );
+        setContentView ( R.layout.activity_login );
 
-        binding = ActivityLoginBinding.inflate(getLayoutInflater());
-        View view = binding.getRoot();
-        setContentView(view);
-
-
-
-        binding.loginbtn.setOnClickListener(v -> {
-            String Email = binding.email.getText().toString();
-            String Password = binding.password.getText().toString();
+        binding = ActivityLoginBinding.inflate ( getLayoutInflater ( ) );
+        View view = binding.getRoot ( );
+        setContentView ( view );
 
 
-            if (TextUtils.isEmpty(Email) || TextUtils.isEmpty(Password)) {
-                binding.email.setError("All fields are required !!");
-                binding.password.setError("All fields are required!!");
+        binding.loginbtn.setOnClickListener ( v -> {
+            String Email = binding.email.getText ( ).toString ( );
+            String Password = binding.password.getText ( ).toString ( );
+
+
+            if (TextUtils.isEmpty ( Email ) || TextUtils.isEmpty ( Password )) {
+                binding.email.setError ( "All fields are required !!" );
+                binding.password.setError ( "All fields are required!!" );
                 return;
             }
-            Log.v("Login ","It Works");
+            Log.v ( "Login " , "It Works" );
 
-            doLogin(Email,Password);
+            doLogin ( Email , Password );
 
-        });
+        } );
 
         binding.registerbtn.setOnClickListener ( v -> {
             Intent obj = new Intent ( Login.this , Register.class );
@@ -65,12 +66,12 @@ public class Login extends AppCompatActivity {
     }
 
     @Override
-    protected void onStart() {
+    protected void onStart () {
         super.onStart ( );
         CheckSession ( );
     }
 
-    private void CheckSession() {
+    private void CheckSession () {
         //   Check if user logged in
         //   If yes then move to dashboard
         SessionManagement sessionManagement = new SessionManagement ( Login.this );
@@ -83,61 +84,73 @@ public class Login extends AppCompatActivity {
         }
     }
 
-    private void doLogin(String email , String password) {
+    private void doLogin ( String email , String password ) {
         Retrofit retrofit = AppConfig.getRetrofit ( );
-        Api service = retrofit.create(Api.class);
+        Api service = retrofit.create ( Api.class );
 
-        Call<ServerResponse> call = service.login(email, password);
-        call.enqueue(new Callback<ServerResponse>() {
+        Call<ServerResponse> call = service.login ( email , password );
+        call.enqueue ( new Callback<ServerResponse> ( ) {
             @Override
-            public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
+            public void onResponse ( Call<ServerResponse> call , Response<ServerResponse> response ) {
 
-                if(response.body()!=null){
+                if (response.body ( ) != null) {
 
-                    ServerResponse serverResponse = response.body();
+                    ServerResponse serverResponse = response.body ( );
 
-                    if(!serverResponse.getError()){
-                        Config.showToast ( context , serverResponse.getMessage ( ) );
-//                        Login Data
-                        Call<ServerResponse> datacall = service.login_data ( email , password );
-                        datacall.enqueue ( new Callback<ServerResponse> ( ) {
-                            @Override
-                            public void onResponse(Call<ServerResponse> call , Response<ServerResponse> response) {
-
-                                if (response.body ( ) != null) {
-                                    ServerResponse serverResponse = response.body ( );
-                                    Log.e ( "Data" , String.valueOf ( serverResponse ) );
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(Call<ServerResponse> call , Throwable t) {
-
-                            }
-                        } );
-//                        SessionGeneration
-                        User user = new User ( 1 , email );
-                        SessionManagement sessionManagement = new SessionManagement ( Login.this );
-                        sessionManagement.saveSession ( user );
-                        MoveToActivity ( );
-
-                    }
-                    else {
-                        Config.showToast(context,serverResponse.getMessage());
+                    Config.showToast ( context , serverResponse.getMessage ( ) );
+                    if (!serverResponse.getError ( )) {
+                        //                        Login Data
+                        fetchLoginData ( email , password );
 
                     }
                 }
             }
 
             @Override
-            public void onFailure(Call<ServerResponse> call, Throwable t) {
-                Config.showToast(context, t.getMessage());
+            public void onFailure ( Call<ServerResponse> call , Throwable t ) {
+                Config.showToast ( context , t.getMessage ( ) );
             }
-        });
+        } );
 
     }
 
-    private void MoveToActivity() {
+    private void fetchLoginData ( String email , String password ) {
+
+        Retrofit retrofit = AppConfig.getRetrofit ( );
+        Api service = retrofit.create ( Api.class );
+
+        Call<ServerResponse> datacall = service.login_data ( email , password );
+        datacall.enqueue ( new Callback<ServerResponse> ( ) {
+            @Override
+            public void onResponse ( Call<ServerResponse> call , Response<ServerResponse> response ) {
+
+                if (response.body ( ) != null) {
+                    ServerResponse serverResponse = response.body ( );
+                    Users loginData = serverResponse.getUsers ( );
+                    id       = loginData.getId ( );
+                    name     = loginData.getUserName ( );
+                    EMAIL    = loginData.getEmail ( );
+                    Password = loginData.getPassword ( );
+                    address  = loginData.getAddress ( );
+                    mobile   = loginData.getMobile ( );
+                }
+            }
+
+            @Override
+            public void onFailure ( Call<ServerResponse> call , Throwable t ) {
+                Config.showToast ( context , "Data Not Found" );
+            }
+        } );
+
+
+//                        SessionGeneration
+        User user = new User ( 1 , email , id , name , address , mobile );
+        SessionManagement sessionManagement = new SessionManagement ( Login.this );
+        sessionManagement.saveSession ( user );
+        MoveToActivity ( );
+    }
+
+    private void MoveToActivity () {
         Intent obj = new Intent ( Login.this , Home.class );
         obj.setFlags ( Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK );
         startActivity ( obj );
