@@ -9,4 +9,8 @@ data class OrderData(
         val EndDate: String,
         val quantity: Int,
         val price: Int,
+        val id: String,
+        val email: String,
+        val mobile: String,
+        val name: String,
 ) : Parcelable

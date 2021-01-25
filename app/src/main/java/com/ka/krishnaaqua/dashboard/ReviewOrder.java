@@ -32,9 +32,10 @@ public class ReviewOrder extends AppCompatActivity implements PaymentResultListe
     private OrderData orderData;
     private int Total;
     private int Days;
+    private String id, name, email, mobile;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate ( Bundle savedInstanceState ) {
         super.onCreate ( savedInstanceState );
         setContentView ( R.layout.activity_review_order );
         binding = ActivityReviewOrderBinding.inflate ( getLayoutInflater ( ) );
@@ -47,7 +48,10 @@ public class ReviewOrder extends AppCompatActivity implements PaymentResultListe
         String Qty = String.valueOf ( orderData.getQuantity ( ) );
         int Price = Integer.parseInt ( String.valueOf ( orderData.getPrice ( ) ) );
 
-
+        id     = orderData.getId ( );
+        name   = orderData.getName ( );
+        email  = orderData.getEmail ( );
+        mobile = orderData.getMobile ( );
         String StartDate = orderData.getStartDate ( );
         String EndDate = orderData.getEndDate ( );
 
@@ -73,6 +77,7 @@ public class ReviewOrder extends AppCompatActivity implements PaymentResultListe
 
     }
 
+    /*--------------------------------------------Start Payment------------------------------------------------*/
     private void startPayment() {
 
 
@@ -91,8 +96,8 @@ public class ReviewOrder extends AppCompatActivity implements PaymentResultListe
             options.put ( "amount" , "" + Total );
 
             JSONObject preFill = new JSONObject ( );
-            preFill.put ( "email" , "alokrathava@gmail.com" );
-            preFill.put ( "contact" , "9512334819" );
+            preFill.put ( "email" , "" + email );
+            preFill.put ( "contact" , "" + mobile );
 
 
             co.open ( activity , options );
@@ -109,7 +114,7 @@ public class ReviewOrder extends AppCompatActivity implements PaymentResultListe
     public void onPaymentSuccess(String razorpayPaymentID) {
         try {
             Toast.makeText ( this , "Payment Successful: " + razorpayPaymentID , Toast.LENGTH_SHORT ).show ( );
-            startActivity ( new Intent ( ReviewOrder.this , Home.class ) );
+            startActivity ( new Intent ( ReviewOrder.this , History.class ) );
         } catch ( Exception e ) {
             Log.e ( TAG , "Exception in onPaymentSuccess" , e );
         }

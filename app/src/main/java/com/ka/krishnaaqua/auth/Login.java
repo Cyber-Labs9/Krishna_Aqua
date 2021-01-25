@@ -13,7 +13,7 @@ import com.ka.krishnaaqua.R;
 import com.ka.krishnaaqua.SessionManagement.SessionManagement;
 import com.ka.krishnaaqua.SessionManagement.User;
 import com.ka.krishnaaqua.dashboard.Home;
-import com.ka.krishnaaqua.data.OrderData;
+import com.ka.krishnaaqua.data.UserData;
 import com.ka.krishnaaqua.data.Users;
 import com.ka.krishnaaqua.databinding.ActivityLoginBinding;
 import com.ka.krishnaaqua.network.Api;
@@ -152,11 +152,10 @@ public class Login extends AppCompatActivity {
     private void MoveToActivity ( String id , String name , String email , String password , String address , String mobile ) {
 
 
-        OrderData orderData = new OrderData ( id , name , email , password , address , mobile );
+        UserData userData = new UserData ( id , name , email , password , address , mobile );
 
         Intent obj = new Intent ( Login.this , Home.class );
-        obj.putExtra ( "userData" , orderData );
-
+        obj.putExtra ( "userData" , String.valueOf ( userData ) );
 
         obj.setFlags ( Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK );
         startActivity ( obj );

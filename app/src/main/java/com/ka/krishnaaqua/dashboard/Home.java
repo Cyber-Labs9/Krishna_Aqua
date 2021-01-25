@@ -21,6 +21,7 @@ import com.ka.krishnaaqua.R;
 import com.ka.krishnaaqua.SessionManagement.SessionManagement;
 import com.ka.krishnaaqua.auth.Login;
 import com.ka.krishnaaqua.data.OrderData;
+import com.ka.krishnaaqua.data.UserData;
 import com.ka.krishnaaqua.databinding.ActivityHomeBinding;
 import com.ka.krishnaaqua.utils.Config;
 
@@ -46,7 +47,14 @@ public class Home extends AppCompatActivity implements
     private int price = 0;
     private String StartDate;
     private String EndDate;
-
+    /*-------------------------------------User Data Variable-------------------------------------------------*/
+    private UserData userData;
+    private String id;
+    private String name;
+    private String email;
+    private String address;
+    private String mobile;
+    /*-------------------------------------------------------------------------------------------------------*/
 
     @Override
     protected void onCreate ( Bundle savedInstanceState ) {
@@ -68,6 +76,15 @@ public class Home extends AppCompatActivity implements
 
         Button StartFrom = mBinding.StartFrom;
         Button EndAt = mBinding.EndAt;
+
+        Intent intent = getIntent ( );
+        userData = intent.getExtras ( ).getParcelable ( "userData" );
+        id       = userData.getId ( );
+        name     = userData.getName ( );
+        email    = userData.getEmail ( );
+        address  = userData.getAddress ( );
+        mobile   = userData.getMobile ( );
+
         /*-----------------------------------------------Navigation Drawer-------------------------------------------------------------------------------------------*/
         mToggle = new ActionBarDrawerToggle ( this , mDrawerLayout , mtoolbar , R.string.Open , R.string.Close );
         mDrawerLayout.addDrawerListener ( mToggle );
@@ -97,6 +114,7 @@ public class Home extends AppCompatActivity implements
 
             return true;
         } );
+
 
         /*------------------------------------------------------Date Picker----------------------------------------------------------------------------------*/
         StartFrom.setOnClickListener ( v -> {
@@ -172,9 +190,6 @@ public class Home extends AppCompatActivity implements
         String TwentyLitre = "20 Litre       ₹20";
         String ThirtyFiveLitre = "35 Litre      ₹30";
         String FiftyLitre = "50 Litre      ₹40";
-//        Log.v("Jug", s);
-//        Blank Variables
-
 
         if (Jug.equals ( TwentyLitre )) {
 //            Log.v("Jug", "Twenty Litres");
@@ -204,7 +219,7 @@ public class Home extends AppCompatActivity implements
         Log.v ( TAG , StartDate );
         Log.v ( TAG , EndDate );
 
-        OrderData orderData = new OrderData ( StartDate , EndDate , qty , price );
+        OrderData orderData = new OrderData ( StartDate , EndDate , qty , price , id , email , mobile , name );
 
         Intent intent = new Intent ( Home.this , ReviewOrder.class );
         intent.putExtra ( "order_data" , orderData );
