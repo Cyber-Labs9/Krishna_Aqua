@@ -28,10 +28,18 @@
         android:background="@drawable/border"
         android:orientation="vertical">
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20sp"
+            android:paddingLeft="15sp"
+            android:text="Confirm Order"
+            android:textColor="@color/black"
+            android:textSize="45sp" />
+
         <TableLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="45sp"
             android:layout_marginBottom="15sp"
             android:padding="15sp">
 

@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.ka.krishnaaqua.R;
 import com.ka.krishnaaqua.data.OrderData;
 import com.ka.krishnaaqua.databinding.ActivityReviewOrderBinding;
+import com.ka.krishnaaqua.utils.SharedPrefManager;
 import com.razorpay.Checkout;
 import com.razorpay.PaymentResultListener;
 
@@ -32,7 +33,9 @@ public class ReviewOrder extends AppCompatActivity implements PaymentResultListe
     private OrderData orderData;
     private int Total;
     private int Days;
-    private String id, name, email, mobile;
+    private int id;
+    private String name, email, mobile;
+    private SharedPrefManager sharedPrefManager;
 
     @Override
     protected void onCreate ( Bundle savedInstanceState ) {
@@ -66,7 +69,15 @@ public class ReviewOrder extends AppCompatActivity implements PaymentResultListe
         binding.NoOfDaysValue.setText ( diff );
         binding.TotalValue.setText ( "₹" + Price * Days );
 
+        System.out.println ( sharedPrefManager.getInt ( "id" ) );
+        System.out.println ( sharedPrefManager.getString ( "name" ) );
+        System.out.println ( sharedPrefManager.getString ( "email" ) );
+        System.out.println ( sharedPrefManager.getString ( "mobile" ) );
 
+//        Log.e (TAG, String.valueOf ( id ) );
+//        Log.e ( TAG,name );
+//        Log.e ( TAG,email );
+//        Log.e ( TAG,mobile );
         binding.bookbtn.setOnClickListener ( v -> {
             startPayment ( );
         } );
