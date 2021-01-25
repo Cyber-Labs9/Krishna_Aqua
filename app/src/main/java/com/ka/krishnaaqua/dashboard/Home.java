@@ -21,9 +21,9 @@ import com.ka.krishnaaqua.R;
 import com.ka.krishnaaqua.SessionManagement.SessionManagement;
 import com.ka.krishnaaqua.auth.Login;
 import com.ka.krishnaaqua.data.OrderData;
-import com.ka.krishnaaqua.data.UserData;
 import com.ka.krishnaaqua.databinding.ActivityHomeBinding;
 import com.ka.krishnaaqua.utils.Config;
+import com.ka.krishnaaqua.utils.SharedPrefManager;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -47,14 +47,8 @@ public class Home extends AppCompatActivity implements
     private int price = 0;
     private String StartDate;
     private String EndDate;
-    /*-------------------------------------User Data Variable-------------------------------------------------*/
-    private UserData userData;
-    private String id;
-    private String name;
-    private String email;
-    private String address;
-    private String mobile;
-    /*-------------------------------------------------------------------------------------------------------*/
+    private SharedPrefManager sharedPrefManager;
+
 
     @Override
     protected void onCreate ( Bundle savedInstanceState ) {
@@ -76,14 +70,6 @@ public class Home extends AppCompatActivity implements
 
         Button StartFrom = mBinding.StartFrom;
         Button EndAt = mBinding.EndAt;
-
-        Intent intent = getIntent ( );
-        userData = intent.getExtras ( ).getParcelable ( "userData" );
-        id       = userData.getId ( );
-        name     = userData.getName ( );
-        email    = userData.getEmail ( );
-        address  = userData.getAddress ( );
-        mobile   = userData.getMobile ( );
 
         /*-----------------------------------------------Navigation Drawer-------------------------------------------------------------------------------------------*/
         mToggle = new ActionBarDrawerToggle ( this , mDrawerLayout , mtoolbar , R.string.Open , R.string.Close );
@@ -114,6 +100,7 @@ public class Home extends AppCompatActivity implements
 
             return true;
         } );
+
 
 
         /*------------------------------------------------------Date Picker----------------------------------------------------------------------------------*/
@@ -219,7 +206,7 @@ public class Home extends AppCompatActivity implements
         Log.v ( TAG , StartDate );
         Log.v ( TAG , EndDate );
 
-        OrderData orderData = new OrderData ( StartDate , EndDate , qty , price , id , email , mobile , name );
+        OrderData orderData = new OrderData ( StartDate , EndDate , qty , price );
 
         Intent intent = new Intent ( Home.this , ReviewOrder.class );
         intent.putExtra ( "order_data" , orderData );

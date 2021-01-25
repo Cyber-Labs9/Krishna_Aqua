@@ -11,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.ka.krishnaaqua.R;
 import com.ka.krishnaaqua.SessionManagement.SessionManagement;
-import com.ka.krishnaaqua.SessionManagement.User;
 import com.ka.krishnaaqua.dashboard.Home;
 import com.ka.krishnaaqua.data.UserData;
 import com.ka.krishnaaqua.data.Users;
@@ -20,6 +19,7 @@ import com.ka.krishnaaqua.network.Api;
 import com.ka.krishnaaqua.network.AppConfig;
 import com.ka.krishnaaqua.network.ServerResponse;
 import com.ka.krishnaaqua.utils.Config;
+import com.ka.krishnaaqua.utils.SharedPrefManager;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -31,6 +31,11 @@ public class Login extends AppCompatActivity {
     private final Context context = this;
     public String id, name, Email, Password, address, mobile;
     private ActivityLoginBinding binding;
+
+    private static final String TAG = "Login";
+
+    private SessionManagement sessionManagement;
+    private SharedPrefManager sharedPrefManager;
 
     @Override
     protected void onCreate ( Bundle savedInstanceState ) {
@@ -72,17 +77,38 @@ public class Login extends AppCompatActivity {
         CheckSession ( );
     }
 
+    /*---------------------------------------------CheckSession---------------------------------------------------*/
     private void CheckSession () {
         //   Check if user logged in
         //   If yes then move to dashboard
-        SessionManagement sessionManagement = new SessionManagement ( Login.this );
-        int UsedId = sessionManagement.getSession ( );
+        sessionManagement = new SessionManagement ( context );
+        sharedPrefManager = new SharedPrefManager ( context );
+
+
+       /* int UsedId = sessionManagement.getSession ( );
 
         if (UsedId != -1) {
             MoveToActivity ( id , name , Email , Password , address , mobile );
         } else {
             //   Do Nothing
+        }*/
+
+
+        int UsedId = sharedPrefManager.getInt ( "id" );
+
+        if (UsedId != -1) {
+
+            name    = sharedPrefManager.getString ( "name" );
+            Email   = sharedPrefManager.getString ( "email" );
+            address = sharedPrefManager.getString ( "address" );
+            mobile  = sharedPrefManager.getString ( "mobile" );
+
+            MoveToActivity ( String.valueOf ( UsedId ) , name , Email , address , mobile );
+        } else {
+
+            Config.showToast ( context , "User ID is Null" );
         }
+
     }
 
     private void doLogin ( String email , String password ) {
@@ -100,9 +126,9 @@ public class Login extends AppCompatActivity {
 
                     Config.showToast ( context , serverResponse.getMessage ( ) );
                     if (!serverResponse.getError ( )) {
-                        //                        Login Data
-                        fetchLoginData ( email , password );
+                        //                        SessionGeneration
 
+                        fetchLoginData ( email , password );
                     }
                 }
             }
@@ -128,12 +154,22 @@ public class Login extends AppCompatActivity {
                 if (response.body ( ) != null) {
                     ServerResponse serverResponse = response.body ( );
                     Users loginData = serverResponse.getUsers ( );
-                    id       = loginData.getId ( );
-                    name     = loginData.getUserName ( );
-                    Email    = loginData.getEmail ( );
-                    Password = loginData.getPassword ( );
-                    address  = loginData.getAddress ( );
-                    mobile   = loginData.getMobile ( );
+                    id      = loginData.getId ( );
+                    name    = loginData.getUserName ( );
+                    Email   = loginData.getEmail ( );
+                    address = loginData.getAddress ( );
+                    mobile  = loginData.getMobile ( );
+                    Log.e ( "" , id );
+
+
+                    sharedPrefManager.setInt ( "id" , Integer.parseInt ( id ) );
+                    sharedPrefManager.setString ( "name" , name );
+                    sharedPrefManager.setString ( "email" , email );
+                    sharedPrefManager.setString ( "address" , address );
+                    sharedPrefManager.setString ( "mobile" , mobile );
+
+                    CheckSession ( );
+
                 }
             }
 
@@ -142,20 +178,15 @@ public class Login extends AppCompatActivity {
                 Config.showToast ( context , "Data Not Found" );
             }
         } );
-//                        SessionGeneration
-        User user = new User ( 1 , email , id , name , address , mobile );
-        SessionManagement sessionManagement = new SessionManagement ( Login.this );
-        sessionManagement.saveSession ( user );
-        MoveToActivity ( id , name , Email , Password , address , mobile );
+
     }
 
-    private void MoveToActivity ( String id , String name , String email , String password , String address , String mobile ) {
+    private void MoveToActivity ( String id , String name , String email , String address , String mobile ) {
+        UserData userData = new UserData ( id , name , email , address , mobile );
 
-
-        UserData userData = new UserData ( id , name , email , password , address , mobile );
-
+        Log.d ( TAG , "MoveToActivity: " );
         Intent obj = new Intent ( Login.this , Home.class );
-        obj.putExtra ( "userData" , String.valueOf ( userData ) );
+        obj.putExtra ( "userData" , userData );
 
         obj.setFlags ( Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK );
         startActivity ( obj );

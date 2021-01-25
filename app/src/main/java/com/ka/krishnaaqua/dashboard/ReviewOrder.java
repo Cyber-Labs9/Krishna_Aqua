@@ -48,10 +48,6 @@ public class ReviewOrder extends AppCompatActivity implements PaymentResultListe
         String Qty = String.valueOf ( orderData.getQuantity ( ) );
         int Price = Integer.parseInt ( String.valueOf ( orderData.getPrice ( ) ) );
 
-        id     = orderData.getId ( );
-        name   = orderData.getName ( );
-        email  = orderData.getEmail ( );
-        mobile = orderData.getMobile ( );
         String StartDate = orderData.getStartDate ( );
         String EndDate = orderData.getEndDate ( );
 
