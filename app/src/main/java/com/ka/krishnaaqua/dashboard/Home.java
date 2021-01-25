@@ -47,7 +47,10 @@ public class Home extends AppCompatActivity implements
     private int price = 0;
     private String StartDate;
     private String EndDate;
+    /*-------------------Shared Prefrence Variable-------------------*/
+    private SessionManagement sessionManagement;
     private SharedPrefManager sharedPrefManager;
+    private String name, Email, mobile, address;
 
 
     @Override
@@ -57,6 +60,9 @@ public class Home extends AppCompatActivity implements
         mBinding = ActivityHomeBinding.inflate ( getLayoutInflater ( ) );
         View view = mBinding.getRoot ( );
         setContentView ( view );
+        /*------------------Sharedprefrence Manager Constructor---------------------*/
+        sharedPrefManager = new SharedPrefManager ( context );
+        sessionManagement = new SessionManagement ( context );
 
         mtoolbar = findViewById ( R.id.toolbar );
         setSupportActionBar ( mtoolbar );
@@ -71,7 +77,26 @@ public class Home extends AppCompatActivity implements
         Button StartFrom = mBinding.StartFrom;
         Button EndAt = mBinding.EndAt;
 
-        /*-----------------------------------------------Navigation Drawer-------------------------------------------------------------------------------------------*/
+
+
+        /*-------------------------------------Shared Prefrences-----------------------------------------------------*/
+//        int UsedId = sharedPrefManager.getInt ( "id" );
+//        if (UsedId != -1) {
+//            name    = sharedPrefManager.getString ( "name" );
+//            Email   = sharedPrefManager.getString ( "email" );
+//            address = sharedPrefManager.getString ( "address" );
+//            mobile  = sharedPrefManager.getString ( "mobile" );
+//            Log.e ( TAG , name );
+//            Log.e ( TAG , Email );
+//            Log.e ( TAG , address );
+//            Log.e ( TAG , mobile );
+//        } else {
+        /*----------------Do Nothing--------------------------*/
+//        }
+
+
+
+        /*-------------------------------------Navigation Drawer-------------------------------------------------------------------------------------------*/
         mToggle = new ActionBarDrawerToggle ( this , mDrawerLayout , mtoolbar , R.string.Open , R.string.Close );
         mDrawerLayout.addDrawerListener ( mToggle );
         mToggle.syncState ( );
@@ -156,6 +181,7 @@ public class Home extends AppCompatActivity implements
 //        This Method will remove session
         SessionManagement sessionManagement = new SessionManagement ( Home.this );
         sessionManagement.removeSession ( );
+        sharedPrefManager.clear ( );
         MoveToLogin ( );
     }
 

@@ -1,6 +1,7 @@
 package com.ka.krishnaaqua.dashboard;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +11,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.ka.krishnaaqua.R;
+import com.ka.krishnaaqua.SessionManagement.SessionManagement;
 import com.ka.krishnaaqua.data.OrderData;
 import com.ka.krishnaaqua.databinding.ActivityReviewOrderBinding;
 import com.ka.krishnaaqua.utils.SharedPrefManager;
@@ -33,9 +35,12 @@ public class ReviewOrder extends AppCompatActivity implements PaymentResultListe
     private OrderData orderData;
     private int Total;
     private int Days;
-    private int id;
-    private String name, email, mobile;
+    private final Context context = this;
+    /*-------------------Shared Prefrence Variable-------------------*/
+    private SessionManagement sessionManagement;
     private SharedPrefManager sharedPrefManager;
+    private String name, Email, mobile, address;
+    private int id;
 
     @Override
     protected void onCreate ( Bundle savedInstanceState ) {
@@ -60,27 +65,38 @@ public class ReviewOrder extends AppCompatActivity implements PaymentResultListe
         String diff = getDaysCount ( end , start );
         Days = Integer.parseInt ( diff );
 
+        /*------------------Sharedprefrence Manager Constructor---------------------*/
+        sharedPrefManager = new SharedPrefManager ( context );
+        sessionManagement = new SessionManagement ( context );
+
+        /*--------------------------------Sharedpref Variable Assignment-------------*/
+        id     = sharedPrefManager.getInt ( "id" );
+        name   = sharedPrefManager.getString ( "name" );
+        Email  = sharedPrefManager.getString ( "Email" );
+        mobile = sharedPrefManager.getString ( "mobile" );
+
+
+
+        /*------------------------------Data View For Users---------------------------*/
         Total = 100 * (Price * Days);
         Log.v ( "" , String.valueOf ( Total ) );
         binding.QuantityValue.setText ( Qty + " " + "Litres" );
         binding.PriceValue.setText ( "₹" + Price + " " + "per Day" );
         binding.StartValue.setText ( StartDate );
         binding.EndDateValue.setText ( EndDate );
-        binding.NoOfDaysValue.setText ( diff );
-        binding.TotalValue.setText ( "₹" + Price * Days );
+        if (Days <= 365) {
+            binding.NoOfDaysValue.setText ( diff );
+            binding.TotalValue.setText ( "₹" + Price * Days );
+            binding.bookbtn.setOnClickListener ( v -> {
+                startPayment ( );
+            } );
 
-        System.out.println ( sharedPrefManager.getInt ( "id" ) );
-        System.out.println ( sharedPrefManager.getString ( "name" ) );
-        System.out.println ( sharedPrefManager.getString ( "email" ) );
-        System.out.println ( sharedPrefManager.getString ( "mobile" ) );
+        } else {
+            binding.NoOfDaysValue.setText ( "Select Less Number Of Days" );
+            binding.TotalValue.setText ( "₹ 0 " );
+            binding.bookbtn.setEnabled ( false );
+        }
 
-//        Log.e (TAG, String.valueOf ( id ) );
-//        Log.e ( TAG,name );
-//        Log.e ( TAG,email );
-//        Log.e ( TAG,mobile );
-        binding.bookbtn.setOnClickListener ( v -> {
-            startPayment ( );
-        } );
 
     }
 
@@ -103,7 +119,7 @@ public class ReviewOrder extends AppCompatActivity implements PaymentResultListe
             options.put ( "amount" , "" + Total );
 
             JSONObject preFill = new JSONObject ( );
-            preFill.put ( "email" , "" + email );
+            preFill.put ( "email" , "" + Email );
             preFill.put ( "contact" , "" + mobile );
 
 
@@ -132,6 +148,7 @@ public class ReviewOrder extends AppCompatActivity implements PaymentResultListe
     public void onPaymentError(int i , String s) {
         try {
             Toast.makeText ( this , "Payment failed: " + i + " " + s , Toast.LENGTH_SHORT ).show ( );
+            startActivity ( new Intent ( ReviewOrder.this , Home.class ) );
         } catch ( Exception e ) {
             Log.e ( TAG , "Exception in onPaymentError" , e );
         }

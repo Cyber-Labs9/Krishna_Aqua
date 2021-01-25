@@ -18,6 +18,7 @@ import com.ka.krishnaaqua.R;
 import com.ka.krishnaaqua.SessionManagement.SessionManagement;
 import com.ka.krishnaaqua.auth.Login;
 import com.ka.krishnaaqua.databinding.ActivityHistoryBinding;
+import com.ka.krishnaaqua.utils.SharedPrefManager;
 
 import java.util.ArrayList;
 
@@ -30,6 +31,7 @@ public class History extends AppCompatActivity {
     DrawerLayout mDrawerLayout;
     private ActivityHistoryBinding mBinding;
     private androidx.appcompat.widget.Toolbar mtoolbar;
+    private SharedPrefManager sharedPrefManager;
 
     @Override
     protected void onCreate ( Bundle savedInstanceState ) {
@@ -124,6 +126,7 @@ public class History extends AppCompatActivity {
 //        This Method will remove session
         SessionManagement sessionManagement = new SessionManagement ( History.this );
         sessionManagement.removeSession ( );
+        sharedPrefManager.clear ( );
         MoveToLogin ( );
     }
 

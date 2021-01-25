@@ -103,6 +103,11 @@ public class Login extends AppCompatActivity {
             address = sharedPrefManager.getString ( "address" );
             mobile  = sharedPrefManager.getString ( "mobile" );
 
+            Log.e ( TAG , name );
+            Log.e ( TAG , Email );
+            Log.e ( TAG , address );
+            Log.e ( TAG , mobile );
+
             MoveToActivity ( String.valueOf ( UsedId ) , name , Email , address , mobile );
         } else {
 
