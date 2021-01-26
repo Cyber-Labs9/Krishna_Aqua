@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.ka.krishnaaqua.R;
 import com.ka.krishnaaqua.SessionManagement.SessionManagement;
+import com.ka.krishnaaqua.data.OrderCompleted;
 import com.ka.krishnaaqua.data.OrderData;
 import com.ka.krishnaaqua.databinding.ActivityReviewOrderBinding;
 import com.ka.krishnaaqua.utils.SharedPrefManager;
@@ -36,6 +37,7 @@ public class ReviewOrder extends AppCompatActivity implements PaymentResultListe
     private int Total;
     private int Days;
     private final Context context = this;
+    private String StartDate, EndDate;
     /*-------------------Shared Prefrence Variable-------------------*/
     private SessionManagement sessionManagement;
     private SharedPrefManager sharedPrefManager;
@@ -56,8 +58,8 @@ public class ReviewOrder extends AppCompatActivity implements PaymentResultListe
         String Qty = String.valueOf ( orderData.getQuantity ( ) );
         int Price = Integer.parseInt ( String.valueOf ( orderData.getPrice ( ) ) );
 
-        String StartDate = orderData.getStartDate ( );
-        String EndDate = orderData.getEndDate ( );
+        StartDate = orderData.getStartDate ( );
+        EndDate   = orderData.getEndDate ( );
 
         Calendar start = getCalendarInstance ( StartDate );
         Calendar end = getCalendarInstance ( EndDate );
@@ -65,19 +67,16 @@ public class ReviewOrder extends AppCompatActivity implements PaymentResultListe
         String diff = getDaysCount ( end , start );
         Days = Integer.parseInt ( diff );
 
-        /*------------------Sharedprefrence Manager Constructor---------------------*/
+        /*------------------Sharedprefrence Manager Constructor-----------------------------------*/
         sharedPrefManager = new SharedPrefManager ( context );
         sessionManagement = new SessionManagement ( context );
 
-        /*--------------------------------Sharedpref Variable Assignment-------------*/
+        /*--------------------------------Sharedprefrence Variable Assignment--------------------------*/
         id     = sharedPrefManager.getInt ( "id" );
         name   = sharedPrefManager.getString ( "name" );
         Email  = sharedPrefManager.getString ( "Email" );
         mobile = sharedPrefManager.getString ( "mobile" );
-
-
-
-        /*------------------------------Data View For Users---------------------------*/
+        /*------------------------------Data View For Users---------------------------------------*/
         Total = 100 * (Price * Days);
         Log.v ( "" , String.valueOf ( Total ) );
         binding.QuantityValue.setText ( Qty + " " + "Litres" );
@@ -134,18 +133,27 @@ public class ReviewOrder extends AppCompatActivity implements PaymentResultListe
     }
 
     @Override
-    public void onPaymentSuccess(String razorpayPaymentID) {
+    public void onPaymentSuccess ( String razorpayPaymentID ) {
         try {
             Toast.makeText ( this , "Payment Successful: " + razorpayPaymentID , Toast.LENGTH_SHORT ).show ( );
-            startActivity ( new Intent ( ReviewOrder.this , History.class ) );
+            orderComplete ( id , StartDate , EndDate , Total );
+
         } catch ( Exception e ) {
             Log.e ( TAG , "Exception in onPaymentSuccess" , e );
         }
 
     }
 
+    private void orderComplete ( int id , String startDate , String endDate , int total ) {
+        OrderCompleted orderCompleted = new OrderCompleted ( StartDate , EndDate , id , total );
+        Intent chg = new Intent ( ReviewOrder.this , OrderComplete.class );
+        chg.putExtra ( "Order Completed" , orderCompleted );
+        startActivity ( chg );
+
+    }
+
     @Override
-    public void onPaymentError(int i , String s) {
+    public void onPaymentError ( int i , String s ) {
         try {
             Toast.makeText ( this , "Payment failed: " + i + " " + s , Toast.LENGTH_SHORT ).show ( );
             startActivity ( new Intent ( ReviewOrder.this , Home.class ) );
@@ -153,10 +161,7 @@ public class ReviewOrder extends AppCompatActivity implements PaymentResultListe
             Log.e ( TAG , "Exception in onPaymentError" , e );
         }
     }
-
-
-
-    /*------------------------------ Convert String in Calendar ---------------------------------*/
+    /*------------------------------ Convert String in Calendar ----------------------------------*/
 
     private Calendar getCalendarInstance(String myDate) {
         Calendar cal = Calendar.getInstance ( );
@@ -170,11 +175,7 @@ public class ReviewOrder extends AppCompatActivity implements PaymentResultListe
 
         return cal;
     }
-
-
-
-
-    /*------------------------------ Count Days Between Dates ---------------------------------*/
+    /*------------------------------ Count Days Between Dates ------------------------------------*/
 
     private String getDaysCount(Calendar start , Calendar end) {
 
