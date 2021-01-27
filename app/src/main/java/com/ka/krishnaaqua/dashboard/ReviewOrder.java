@@ -12,9 +12,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.ka.krishnaaqua.R;
 import com.ka.krishnaaqua.SessionManagement.SessionManagement;
-import com.ka.krishnaaqua.data.OrderCompleted;
 import com.ka.krishnaaqua.data.OrderData;
 import com.ka.krishnaaqua.databinding.ActivityReviewOrderBinding;
+import com.ka.krishnaaqua.network.Api;
+import com.ka.krishnaaqua.network.AppConfig;
+import com.ka.krishnaaqua.network.ServerResponse;
+import com.ka.krishnaaqua.utils.Config;
 import com.ka.krishnaaqua.utils.SharedPrefManager;
 import com.razorpay.Checkout;
 import com.razorpay.PaymentResultListener;
@@ -27,14 +30,19 @@ import java.util.Calendar;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+
 public class ReviewOrder extends AppCompatActivity implements PaymentResultListener {
     private static final String TAG = ReviewOrder.class.getSimpleName ( );
 
     //    Variable Declaration
-
     private ActivityReviewOrderBinding binding;
     private OrderData orderData;
     private int Total;
+    private int Qty;
     private int Days;
     private final Context context = this;
     private String StartDate, EndDate;
@@ -55,7 +63,7 @@ public class ReviewOrder extends AppCompatActivity implements PaymentResultListe
         Intent intent = getIntent ( );
         orderData = intent.getExtras ( ).getParcelable ( "order_data" );
 
-        String Qty = String.valueOf ( orderData.getQuantity ( ) );
+        Qty = orderData.getQuantity ( );
         int Price = Integer.parseInt ( String.valueOf ( orderData.getPrice ( ) ) );
 
         StartDate = orderData.getStartDate ( );
@@ -136,7 +144,7 @@ public class ReviewOrder extends AppCompatActivity implements PaymentResultListe
     public void onPaymentSuccess ( String razorpayPaymentID ) {
         try {
             Toast.makeText ( this , "Payment Successful: " + razorpayPaymentID , Toast.LENGTH_SHORT ).show ( );
-            orderComplete ( id , StartDate , EndDate , Total );
+            orderComplete ( id , StartDate , EndDate , Total , Qty , razorpayPaymentID );
 
         } catch ( Exception e ) {
             Log.e ( TAG , "Exception in onPaymentSuccess" , e );
@@ -144,13 +152,34 @@ public class ReviewOrder extends AppCompatActivity implements PaymentResultListe
 
     }
 
-    private void orderComplete ( int id , String startDate , String endDate , int total ) {
-        OrderCompleted orderCompleted = new OrderCompleted ( StartDate , EndDate , id , total );
-        Intent chg = new Intent ( ReviewOrder.this , OrderComplete.class );
-        chg.putExtra ( "Order Completed" , orderCompleted );
-        startActivity ( chg );
+    private void orderComplete ( int id , String startDate , String endDate , int total , int qty , String razorpayPaymentID ) {
+        Retrofit retrofit = AppConfig.getRetrofit ( );
+        Api service = retrofit.create ( Api.class );
 
+        Call<ServerResponse> call = service.order ( id , startDate , endDate , total , qty , razorpayPaymentID );
+        call.enqueue ( new Callback<ServerResponse> ( ) {
+            @Override
+            public void onResponse ( Call<ServerResponse> call , Response<ServerResponse> response ) {
+                if (response.body ( ) != null) {
+                    ServerResponse serverResponse = response.body ( );
+                    if (!serverResponse.getError ( )) {
+                        Config.showToast ( context , serverResponse.getMessage ( ) );
+                        startActivity ( new Intent ( ReviewOrder.this , Home.class ) );
+                        finish ( );
+                    } else {
+                        Config.showToast ( context , serverResponse.getMessage ( ) );
+
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure ( Call<ServerResponse> call , Throwable t ) {
+
+            }
+        } );
     }
+
 
     @Override
     public void onPaymentError ( int i , String s ) {

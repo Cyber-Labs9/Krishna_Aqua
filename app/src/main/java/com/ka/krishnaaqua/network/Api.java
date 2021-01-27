@@ -27,13 +27,26 @@ public interface Api {
 
     @FormUrlEncoded
     @POST(my_url + "register")
-    Call<ServerResponse> register(
+    Call<ServerResponse> register (
             @Field("name") String mName ,
             @Field("email") String mEmail ,
             @Field("pwd") String mPwd ,
             @Field("mobile") String mphone ,
             @Field("address") String maddress
     );
+
+
+    @FormUrlEncoded
+    @POST(my_url + "order")
+    Call<ServerResponse> order (
+            @Field("id") int id ,
+            @Field("startDate") String startDate ,
+            @Field("endDate") String endDate ,
+            @Field("total") int total ,
+            @Field("qty") int qty ,
+            @Field("paymentId") String razorpayPaymentID
+    );
+
 
 }
 
