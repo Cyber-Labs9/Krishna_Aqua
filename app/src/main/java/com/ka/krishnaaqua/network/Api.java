@@ -37,8 +37,8 @@ public interface Api {
 
 
     @FormUrlEncoded
-    @POST(my_url + "order")
-    Call<ServerResponse> order (
+    @POST(my_url + "insertOrder")
+    Call<ServerResponse> insertOrder (
             @Field("id") int id ,
             @Field("startDate") String startDate ,
             @Field("endDate") String endDate ,
@@ -47,6 +47,11 @@ public interface Api {
             @Field("paymentId") String razorpayPaymentID
     );
 
+    @FormUrlEncoded
+    @POST(my_url + "fetchOrder")
+    Call<ServerResponse> fetchOrder (
+            @Field("u_id") int id
+    );
 
 }
 

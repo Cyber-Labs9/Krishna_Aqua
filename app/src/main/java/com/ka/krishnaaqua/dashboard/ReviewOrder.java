@@ -143,7 +143,7 @@ public class ReviewOrder extends AppCompatActivity implements PaymentResultListe
     @Override
     public void onPaymentSuccess ( String razorpayPaymentID ) {
         try {
-            Toast.makeText ( this , "Payment Successful: " + razorpayPaymentID , Toast.LENGTH_SHORT ).show ( );
+//            Toast.makeText ( this , "Payment Successful: " + razorpayPaymentID , Toast.LENGTH_SHORT ).show ( );
             orderComplete ( id , StartDate , EndDate , Total , Qty , razorpayPaymentID );
 
         } catch ( Exception e ) {
@@ -156,7 +156,7 @@ public class ReviewOrder extends AppCompatActivity implements PaymentResultListe
         Retrofit retrofit = AppConfig.getRetrofit ( );
         Api service = retrofit.create ( Api.class );
 
-        Call<ServerResponse> call = service.order ( id , startDate , endDate , total , qty , razorpayPaymentID );
+        Call<ServerResponse> call = service.insertOrder ( id , startDate , endDate , total , qty , razorpayPaymentID );
         call.enqueue ( new Callback<ServerResponse> ( ) {
             @Override
             public void onResponse ( Call<ServerResponse> call , Response<ServerResponse> response ) {
