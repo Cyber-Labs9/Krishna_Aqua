@@ -1,6 +1,7 @@
 package com.ka.krishnaaqua.dashboard;
 
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,14 +12,18 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ka.krishnaaqua.R;
+import com.ka.krishnaaqua.data.HistoryData;
+import com.ka.krishnaaqua.data.Order;
+import com.ka.krishnaaqua.network.ServerResponse;
 
 import java.util.List;
 
 public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryVH> {
     private static final String TAG = "MovieAdapter";
-    List<History> historyList;
+    List<Order> historyList;
+    private int money,paisa;
 
-    public HistoryAdapter ( List<History> historyList ) {
+    public HistoryAdapter ( List<Order> historyList ) {
         this.historyList = historyList;
 
     }
@@ -33,13 +38,20 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
     @Override
     public void onBindViewHolder ( @NonNull HistoryVH holder , int position ) {
 
-        History history = historyList.get ( position );
-        holder.titleTextView.setText ( history.getTitle ( ) );
-        holder.yearTextView.setText ( history.getYear ( ) );
-        holder.ratingTextView.setText ( history.getRating ( ) );
-        holder.plotTextView.setText ( history.getPlot ( ) );
+        Order historyData = (Order) historyList.get ( position );
 
-        boolean isExpanded = historyList.get ( position ).isExpanded ( );
+        holder.titleTextView.setText ( historyData.getId ( )+". "+ historyData.getStartDate ());
+        holder.yearTextView.setText ( historyData.getStartDate ( ) );
+        holder.ratingTextView.setText ( historyData.getEndDate ( ) );
+        holder.plotTextViewValue.setText ( historyData.getQty ( )+"   Litres" );
+//        holder.TotalValue.setText ( historyData.getTotal ( ) );
+        paisa = Integer.parseInt ( historyData.getTotal () );
+        money = paisa/100;
+        holder.TotalValue.setText ("₹"+ String.valueOf ( money ) );
+
+
+
+        boolean isExpanded = historyData.isExpanded ( );
         holder.expandableLayout.setVisibility ( isExpanded ? View.VISIBLE : View.GONE );
 
     }
@@ -54,7 +66,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
         private static final String TAG = "MovieVH";
 
         ConstraintLayout expandableLayout;
-        TextView titleTextView, yearTextView, ratingTextView, plotTextView;
+        TextView titleTextView, yearTextView, ratingTextView, plotTextView, TotalValue,plotTextViewValue;
 
         public HistoryVH ( @NonNull final View itemView ) {
             super ( itemView );
@@ -63,18 +75,17 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
             yearTextView     = itemView.findViewById ( R.id.yearTextView );
             ratingTextView   = itemView.findViewById ( R.id.ratingTextView );
             plotTextView     = itemView.findViewById ( R.id.plotTextView );
+            plotTextViewValue = itemView.findViewById ( R.id.plotTextViewValue );
             expandableLayout = itemView.findViewById ( R.id.expandableLayout );
+            TotalValue       = itemView.findViewById ( R.id.textViewTotal );
 
 
-            titleTextView.setOnClickListener ( new View.OnClickListener ( ) {
-                @Override
-                public void onClick ( View view ) {
+            titleTextView.setOnClickListener ( view -> {
 
-                    History history = historyList.get ( getAdapterPosition ( ) );
-                    history.setExpanded ( !history.isExpanded ( ) );
-                    notifyItemChanged ( getAdapterPosition ( ) );
+                Order historyData = (Order) historyList.get ( getAdapterPosition ( ) );
+                historyData.setExpanded ( !historyData.isExpanded ( ) );
+                notifyItemChanged ( getAdapterPosition ( ) );
 
-                }
             } );
         }
 

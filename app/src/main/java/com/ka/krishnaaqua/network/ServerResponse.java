@@ -2,7 +2,11 @@ package com.ka.krishnaaqua.network;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.ka.krishnaaqua.data.Order;
+import com.ka.krishnaaqua.data.OrderData;
 import com.ka.krishnaaqua.data.Users;
+
+import java.util.List;
 
 public class ServerResponse {
 
@@ -15,6 +19,19 @@ public class ServerResponse {
     @SerializedName("users")
     @Expose
     private Users users;
+
+    @SerializedName("orders")
+    @Expose
+    private List<Order> orders = null;
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
+    }
+
 
     public Boolean getError () {
         return error;

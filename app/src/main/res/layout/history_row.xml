@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -10,9 +11,7 @@
         android:layout_height="wrap_content"
         android:padding="8dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             >
@@ -22,19 +21,12 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:padding="16dp"
-                android:text="Movie title"
+                android:text="Order Id"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:background="?attr/selectableItemBackground"
-                />
-
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_baseline_arrow_drop_down_24"
-                app:layout_constraintEnd_toEndOf="@+id/titleTextView"
+                android:background="#bdbdbd"
                 />
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -45,6 +37,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
+                android:background="#e0e0e0"
                 app:layout_constraintTop_toBottomOf="@id/titleTextView">
 
                 <TextView
@@ -53,7 +46,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginLeft="8dp"
-                    android:text="TextView"
+                    android:text="StartDate"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     app:layout_constraintStart_toEndOf="@+id/textView"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -64,7 +57,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
                     android:layout_marginRight="16dp"
-                    android:text="TextView"
+                    android:text="EndDate"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -75,7 +68,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginLeft="16dp"
-                    android:text="Release Year:"
+                    android:text="StartDate: "
                     android:textStyle="bold"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     app:layout_constraintStart_toStartOf="parent"
@@ -87,11 +80,21 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
                     android:layout_marginRight="8dp"
-                    android:text="Rating:"
+                    android:text="EndDate:"
                     android:textStyle="bold"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     app:layout_constraintEnd_toStartOf="@+id/ratingTextView"
                     app:layout_constraintTop_toTopOf="parent" />
+
+<!--                <TextView-->
+<!--                    android:id="@+id/TotalValue"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="Total"-->
+<!--                    android:textStyle="bold"-->
+<!--                    app:layout_constraintStart_toBottomOf="@+id/yearTextView"-->
+<!--                    tools:layout_editor_absoluteX="67dp"-->
+<!--                    tools:layout_editor_absoluteY="27dp" />-->
 
                 <TextView
                     android:id="@+id/textView3"
@@ -100,10 +103,20 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginLeft="16dp"
                     android:layout_marginTop="8dp"
-                    android:text="Plot"
+                    android:text="Total:"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+                <TextView
+                    android:id="@+id/textViewTotal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="8dp"
+                    android:text="Total"
+                    app:layout_constraintStart_toEndOf="@+id/textView3"
+                    app:layout_constraintTop_toBottomOf="@+id/yearTextView" />
 
                 <TextView
                     android:id="@+id/plotTextView"
@@ -115,11 +128,22 @@
                     android:layout_marginEnd="16dp"
                     android:layout_marginRight="16dp"
                     android:layout_marginBottom="16dp"
-                    android:text="TextView"
+                    android:text="Qty:"
+                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+                <TextView
+                    android:id="@+id/plotTextViewValue"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="36dp"
+                    android:layout_marginBottom="16dp"
+                    android:text="Qty"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/plotTextView" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

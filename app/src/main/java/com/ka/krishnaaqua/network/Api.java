@@ -39,7 +39,7 @@ public interface Api {
     @FormUrlEncoded
     @POST(my_url + "insertOrder")
     Call<ServerResponse> insertOrder (
-            @Field("id") int id ,
+            @Field("u_id") int id ,
             @Field("startDate") String startDate ,
             @Field("endDate") String endDate ,
             @Field("total") int total ,
